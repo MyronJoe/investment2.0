@@ -1,0 +1,39 @@
+.preloader {
+    background-color: #f7f9fb;
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    z-index: 500000;
+    top: 0;
+    color: navy;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .5s ease-in-out;
+}
+
+.preloader_hidden {
+    display: none;
+    transition: .5s ease-in-out;
+}
+
+.inner {
+    content: '';
+    height: 90px;
+    width: 90px;
+    border: 13px solid #dddddd;
+    border-top-color: #FF4949;
+    border-radius: 100%;
+    animation: spinner 1.2s ease infinite;
+}
+
+@keyframes spinner {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
