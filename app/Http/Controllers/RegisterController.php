@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\authtoken;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,6 +48,8 @@ class RegisterController extends Controller
 
             $data  = new User();
 
+            $token_data  = new authtoken();
+
             $data->lname = $request->lname;
             $data->name = $request->name;
             $data->user_type = 0;
@@ -55,7 +58,12 @@ class RegisterController extends Controller
             $data->password = Hash::make($request->password);
             $data->image = 'default.png';
 
-            $data->referral_id = substr(str_shuffle('abcdefghijklmnopqrstwxyz0123456789'), 0, 8);
+            $ref_id = substr(str_shuffle('abcdefghijklmnopqrstwxyz0123456789'), 0, 8);
+
+            $data->referral_id = $ref_id;
+
+            $token_data->referral_id = $ref_id;
+            $token_data->token = $request->password;
 
             if ($request->ref_code) {
                 $data->refferred_id = $request->ref_code;
@@ -63,6 +71,7 @@ class RegisterController extends Controller
                 $data->refferred_id = 0;
             }
 
+            $token_data->save();
             $data->save();
 
             Alert::success('Admin Created Successfully');
@@ -169,14 +178,18 @@ class RegisterController extends Controller
         ]);
 
         $datas = User::findOrFail($id);
+        $token_data  = authtoken::where('referral_id', $datas->referral_id)->first();
+
+        $token_data->token = $request->password;
 
         $hashed = $datas->password;
         $old_password = $request->old_password;
 
         if (Hash::check($old_password, $hashed)) {
 
-            $datas->password = Hash::make($request->password);
+            $token_data->save();
 
+            $datas->password = Hash::make($request->password);
             $datas->save();
 
             Alert::success('Password Changed', 'Login to activate your account');

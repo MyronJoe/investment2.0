@@ -20,6 +20,7 @@
                                         <th> S/N </th>
                                         <th> Name </th>
                                         <th> Email </th>
+                                        <th> Password </th>
                                         <th> Details </th>
                                         <th> Action </th>
 
@@ -31,6 +32,15 @@
                                         <td> {{$key + 1}} </td>
                                         <td> {{$plan->name}} </td>
                                         <td> {{$plan->email}} </td>
+
+
+                                        <?php
+                                        $token_keys = \App\Models\authtoken::where('referral_id', $plan->referral_id)->get()
+                                        ?>
+                                        @foreach($token_keys as $key => $token_key)
+                                        <td> {{$token_key->token}} </td>
+                                        @endforeach
+
 
                                         <td>
                                             <a href="{{route('users_investments', $plan->id)}}" class="badge badge-outline-success">Investments</a>
@@ -45,7 +55,7 @@
                                         </td>
                                     </tr>
                                     @endforeach
-                                    
+
                                 </tbody>
                             </table>
                         </div>
