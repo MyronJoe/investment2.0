@@ -51,6 +51,8 @@
                                         <td>
                                             <!-- <a href="{{route('edit_plan', $plan->id)}}" class="badge badge-outline-primary">Edit</a> -->
 
+                                            <a href="{{route('credit_user', $plan->id)}}" class="badge badge-outline-primary">Credit/Debit</a>
+
                                             <a href="{{route('delete_user', $plan->id)}}" onclick="confirmation(event)" class="badge badge-outline-danger">Delete</a>
                                         </td>
                                     </tr>

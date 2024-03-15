@@ -159,6 +159,18 @@ class AdminController extends Controller
         return view('backend.plans.all_invest', compact('data'));
     }
 
+
+    //credit_user
+    public function credit_user($id)
+    {
+
+        $data = User::findorfail($id);
+
+        // dd($data);
+
+        return view('backend.users.creditUser', compact('data'));
+    }
+
     //edit_plan
     public function edit_plan($id)
     {
@@ -194,6 +206,42 @@ class AdminController extends Controller
 
         Alert::success('Plan Updated Successfully');
         return redirect()->route('all_plans')->with('success', 'Plan Updated Successfully');
+    }
+
+
+
+    //update_amount
+    public function update_amount($id, Request $request)
+    {
+
+        $request->validate([
+            'credit_user' => 'required',
+            'action' => 'required',
+        ]);
+
+        $data = User::findorfail($id);
+
+        if ($request->action == 'credit') {
+
+            $data->balance += $request->credit_user;
+            $data->save();
+
+            Alert::success('User Credited Successfully');
+            return redirect()->route('all_users')->with('success', 'User Credited Successfully');
+        } else {
+
+
+            if ($data->balance < 1 || $data->balance == '') {
+                Alert::error('User balance is low');
+                return redirect()->back()->with('error', 'User balance is low');
+            } else {
+                $data->balance -= $request->credit_user;
+                $data->save();
+
+                Alert::success('User Debited Successfully');
+                return redirect()->route('all_users')->with('success', 'User Debited Successfully');
+            }
+        }
     }
 
     //delete_plan
@@ -499,12 +547,12 @@ class AdminController extends Controller
     }
 
     //make_investment2
-    public function make_investment2(){
+    public function make_investment2()
+    {
 
         Investments::where('status', 1)->update('amount + 1000');
 
         return redirect()->back()->with('success', 'Done');
-
     }
 
 

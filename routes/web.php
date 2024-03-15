@@ -150,6 +150,10 @@ Route::middleware(['auth:sanctum', 'checkadmin',  config('jetstream.auth_session
 
         Route::get('/edit_plan/{id}', 'edit_plan')->name('edit_plan');
 
+        Route::get('/credit_user/{id}', 'credit_user')->name('credit_user');
+
+        Route::post('/update_amount/{id}', 'update_amount')->name('update_amount');
+
         Route::post('/update_plan/{id}', 'update_plan')->name('update_plan');
 
         Route::get('/delete_plan/{id}', 'delete_plan')->name('delete_plan');
